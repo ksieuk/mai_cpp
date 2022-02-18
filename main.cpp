@@ -24,7 +24,7 @@ int main() {
         if ((number / power) != 0) {
             cout << number / power << "*10^" << i;
         }
-        number = number % power;
+        number %= power;
     }
     return 0;
 }
