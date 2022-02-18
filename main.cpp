@@ -5,7 +5,7 @@ using namespace std;
 int main() {
     int32_t number, num;
     int i = 0, power = 1;
-    cout << "Enter five-digit number: ";
+    cout << "Enter number: ";
     cin >> number;
 
     num = number;
@@ -18,7 +18,7 @@ int main() {
     for (i; i > 0; 1) {
         i--;
         power /= 10;
-        if ((number / power ) > 0) {
+        if ((number / power) > 0) {
             cout << "+";
         }
         if ((number / power) != 0) {
