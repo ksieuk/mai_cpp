@@ -18,7 +18,7 @@ int main() {
     for (i; i > 0; 1) {
         i--;
         power /= 10;
-        if (number > 0) {
+        if ((number / power ) > 0) {
             cout << "+";
         }
         if ((number / power) != 0) {
