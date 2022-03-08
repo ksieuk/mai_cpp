@@ -1,8 +1,7 @@
 #include <iostream>
-
 using namespace std;
 
-int main() {
+int mains() {
     int32_t number, num;
     int i = 0, power = 1;
     cout << "Enter number: ";
