@@ -15,8 +15,6 @@ int is_prime(int number, const int prime_numbers[]) {
 }
 
 int main() {
-
-
     int n, i = 1, num = 3;
     cin >> n;
     int prime_numbers[n] = {2};
@@ -28,8 +26,7 @@ int main() {
     while (n > i) {
         if (is_prime(num, prime_numbers)) {
             cout << num << ' ';
-            prime_numbers[i] = num;
-            i++;
+            prime_numbers[++i] = num;
         }
         num++;
     }
