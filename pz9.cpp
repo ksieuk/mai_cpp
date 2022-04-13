@@ -46,6 +46,18 @@ void go_through(node_t *p) {
         cout << p->data << ' ';
         p = p->next;
     }
+    cout << endl;
+}
+
+void get_element(node_t *p, int index) {
+    while (index--) {
+        if (p == nullptr) {
+            cout << "NULL" << endl;
+            return;
+        }
+        p = p->next;
+    }
+    cout << p->data << endl;
 }
 
 void append_random(node_t **head) {
@@ -64,6 +76,9 @@ int main() {
     append(&head, 6);
     append_random(&head);
     go_through(head);
+    get_element(head, 4);
+    get_element(head, 0);
+    get_element(head, 1000);
 
     return 0;
 }
