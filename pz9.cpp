@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
-using namespace std;
 
+using namespace std;
 
 struct node_t {
     int data;
@@ -81,4 +81,5 @@ int main() {
     get_element(head, 1000);
 
     return 0;
+
 }
