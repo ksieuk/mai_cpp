@@ -24,7 +24,7 @@ public:
 MaxHeap::MaxHeap(int cap)
 {
     size = 0;
-    capacity = cap;
+    capacity = cap * 2 + 2;
     p = new int[cap];
 }
 
