@@ -22,35 +22,36 @@ using namespace std;
 
 class Array {
 private:
-    int *head;
+    int *arr;
     int sizeOfArray;
 public:
     Array() {
         sizeOfArray = 0;
-        head = new int[sizeOfArray];
+        arr = new int[sizeOfArray];
     }
 
-    explicit Array(int sizeOfArray) {
+    Array(int sizeOfArray) {
         this->sizeOfArray = sizeOfArray;
-        head = new int[sizeOfArray];
+        arr = new int[sizeOfArray];
         for (int i = 0; i < this->sizeOfArray; i++) {
-            head[i] = 0;
+            arr[i] = 0;
         }
     }
 
     Array(const Array &other) {
         sizeOfArray = other.sizeOfArray;
-        head = new int[sizeOfArray];
-        for (int i = 0; i < sizeOfArray; i++) {
-            head[i] = other.head[i];
-        }
+        arr = new int[sizeOfArray];
+//        for (int i = 0; i < sizeOfArray; i++) {
+//            arr[i] = other.arr[i];  // memcpy
+//        }
+        memcpy(arr, other.arr, sizeof *other.arr * other.sizeOfArray);
     }
 
     ~Array() {
-        delete[] head;
+        delete[] arr;
         sizeOfArray = 0;
-        head = nullptr;
-        cout << "Array with head="<< &head <<" successfully cleared" << endl;
+        arr = nullptr;
+        cout << "Array with head="<< &arr <<" successfully cleared" << endl;
     }
 
     Array operator +(const Array &other) {
@@ -58,7 +59,7 @@ public:
 
         Array sumArray(minSize);
         for(int i = 0; i < minSize; i++){
-            sumArray.head[i] = head[i] + other.head[i];
+            sumArray.arr[i] = arr[i] + other.arr[i];
         }
         return sumArray;
     }
@@ -68,19 +69,19 @@ public:
 
         Array sumArray(minSize);
         for(int i = 0; i < minSize; i++){
-            sumArray.head[i] = head[i] - other.head[i];
+            sumArray.arr[i] = arr[i] - other.arr[i];
         }
         return sumArray;
     }
 
-    bool isCorrectIndex(int index) const {
+    inline bool isCorrectIndex(int index) const {
         if (0 <= index && index <= sizeOfArray) {
             return true;
         }
         return false;
     }
 
-    static bool isCorrectValue(int value) {
+    inline static bool isCorrectValue(int value) {
         if (-100 <= value && value <= 100) {
             return true;
         }
@@ -90,20 +91,19 @@ public:
     void Set(int index, int value) {
         if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be between [-100, 100]");
         if (!isCorrectIndex(index)) throw out_of_range("Out of range: Array out of bounds");
-        head[index] = value;
+
+        arr[index] = value;
     }
 
     int Get(int index) {
-        if (isCorrectIndex(index)) {
-            return head[index];
-        } else {
-            throw out_of_range("Out of range: Array out of bounds");
-        }
+        if (!isCorrectIndex(index)) throw out_of_range("Out of range: Array out of bounds");
+
+        return arr[index];
     }
 
     void printValues() {
         for (int i = 0; i != sizeOfArray; i++) {
-            cout << head[i] << " ";
+            cout << arr[i] << " ";
         }
         cout << "\n";
     }
@@ -112,11 +112,11 @@ public:
         if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be between [-100, 100]");
         int *newArray = new int[sizeOfArray + 1];
         for (int i = 0; i < sizeOfArray; i++) {
-            newArray[i] = head[i];
+            newArray[i] = arr[i];
         }
         newArray[sizeOfArray] = value;
-        delete[] head;
-        head = newArray;
+        delete[] arr;
+        arr = newArray;
         sizeOfArray++;
     }
 };
@@ -124,7 +124,7 @@ public:
 int main() {
     Array a(5);
     Array b(5);
-    for(int i = 0; i < 5; i++){
+    for(int i = 0; i < 5; i++) {
         a.Set(i, i + 1);
         b.Set(i, (i + 1) * 2);
     }

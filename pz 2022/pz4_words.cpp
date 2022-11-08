@@ -8,7 +8,7 @@
 
 using namespace std;
 
-/*Практическое задание №4.
+/*Практическое задание №4. STL.
  *
  *Задание 1. map
  * Написать программу для работы с контейнером map.
@@ -61,34 +61,10 @@ void print_repeated_words_number() {
 }
 
 
-void get_vector_characteristic() {
-    vector <int> v1,v2;
-    int a, b;
-    cout << "Enter the number of values for the two vectors: ";
-    cin >> a >> b;
-    v1.reserve(a);
-    v2.reserve(b);
-//    srand(time(NULL));
-    for (int j = 0; j < a; ++j) {
-        v1.insert(v1.end(), rand()%200 -100);
-    }
-    for (int j = 0; j < b; ++j) {
-        v2.insert(v2.end(), rand()%200 -100);
-    }
 
-    for (int i = 0; i < a; i++) {
-        cout << v1[i] << " ";
-    }
-    cout << endl;
-    for (int i = 0; i < b; i++) {
-        cout << v2[i] << " ";
-    }
-    cout << endl;
-}
 
 
 int main() {
-//    print_repeated_words_number();
-    get_vector_characteristic();
+    print_repeated_words_number();
     return 0;
 }

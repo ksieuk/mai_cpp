@@ -21,113 +21,132 @@ using namespace std;
  */
 
 
+template <typename T>
 class Array {
 private:
-    int *head;
+    T *arr;
     int sizeOfArray;
 public:
     Array() {
         sizeOfArray = 0;
-        head = new int[sizeOfArray];
+        arr = new T[sizeOfArray];
     }
 
-    explicit Array(int sizeOfArray) {
+    Array(int sizeOfArray) {
         this->sizeOfArray = sizeOfArray;
-        head = new int[sizeOfArray];
+        arr = new T[sizeOfArray];
         for (int i = 0; i < this->sizeOfArray; i++) {
-            head[i] = 0;
+            arr[i] = 0;
         }
     }
 
     Array(const Array &other) {
         sizeOfArray = other.sizeOfArray;
-        head = new int[sizeOfArray];
-        for (int i = 0; i < sizeOfArray; i++) {
-            head[i] = other.head[i];
-        }
+        arr = new T[sizeOfArray];
+//        for (int i = 0; i < sizeOfArray; i++) {
+//            arr[i] = other.arr[i];  // memcpy
+//        }
+        memcpy(arr, other.arr, sizeof *other.arr * other.sizeOfArray);
     }
 
     ~Array() {
-        delete[] head;
+        delete[] arr;
         sizeOfArray = 0;
-        head = nullptr;
-        cout << "Array with head="<< &head <<" successfully cleared" << endl;
+        arr = nullptr;
+        cout << "Array with head="<< &arr <<" successfully cleared" << endl;
     }
 
-    Array operator +(const Array &other) {
-        int minSize = min(sizeOfArray, other.sizeOfArray);
+    Array<T> operator +(const Array &other) {
+        T minSize = min(sizeOfArray, other.sizeOfArray);
 
         Array sumArray(minSize);
         for(int i = 0; i < minSize; i++){
-            sumArray.head[i] = head[i] + other.head[i];
+            sumArray.arr[i] = arr[i] + other.arr[i];
         }
         return sumArray;
     }
 
-    Array operator -(const Array &other) {
+    Array<T> operator -(const Array &other) {
         int minSize = min(sizeOfArray, other.sizeOfArray);
 
         Array sumArray(minSize);
         for(int i = 0; i < minSize; i++){
-            sumArray.head[i] = head[i] - other.head[i];
+            sumArray.arr[i] = arr[i] - other.arr[i];
         }
         return sumArray;
     }
 
-    bool isCorrectIndex(int index) const {
+    Array<T> operator =(const Array &other) {
+        this -> sizeOfArray = other.sizeOfArray;
+        for (int i = 0; i < sizeOfArray; i++) {
+            this -> arr[i] = other.arr[i];
+        }
+        return *this;
+    }
+
+    friend ostream& operator<<(ostream &os, const Array<T> &array_) {
+        for (int i = 0; i < array_.sizeOfArray; i++) {
+            os << array_.arr[i] << " ";
+        }
+        return os << endl;
+    }
+
+    inline bool isCorrectIndex(int index) const {
         if (0 <= index && index <= sizeOfArray) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    static bool isCorrectValue(int value) {
-        if (-100 <= value && value <= 100) {
+    inline static bool isCorrectValue(T value) {
+        const type_info& valueType = typeid(value);
+        const type_info& arrType = typeid(T);
+        if (valueType == arrType && (-100 <= value && value <= 100)) {
             return true;
-        } else {
-            return false;
         }
+//        if (-100 <= value && value <= 100) {
+//            return true;
+//        }
+        return false;
     }
 
-    void Set(int index, int value) {
-        if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be between [-100, 100]");
+    void Set(int index, T value) {
+        if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be of the same type and between [-100, 100]");
         if (!isCorrectIndex(index)) throw out_of_range("Out of range: Array out of bounds");
-        head[index] = value;
+
+        arr[index] = value;
     }
 
     int Get(int index) {
-        if (isCorrectIndex(index)) {
-            return head[index];
-        } else {
-            throw out_of_range("Out of range: Array out of bounds");
-        }
+        if (!isCorrectIndex(index)) throw out_of_range("Out of range: Array out of bounds");
+
+        return arr[index];
     }
 
     void printValues() {
         for (int i = 0; i != sizeOfArray; i++) {
-            cout << head[i] << " ";
+            cout << arr[i] << " ";
         }
         cout << "\n";
     }
 
-    void pushBack(int value) {
-        if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be between [-100, 100]");
-        int *newArray = new int[sizeOfArray + 1];
+    void pushBack(T value) {
+        if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be of the same type and between [-100, 100]");
+        T *newArray = new T[sizeOfArray + 1];
         for (int i = 0; i < sizeOfArray; i++) {
-            newArray[i] = head[i];
+            newArray[i] = arr[i];
         }
         newArray[sizeOfArray] = value;
-        delete[] head;
-        head = newArray;
+        delete[] arr;
+        arr = newArray;
         sizeOfArray++;
     }
 };
 
 int main() {
-    Array a(5);
-    Array b(5);
-    for(int i = 0; i < 5; i++){
+    Array<long int> a(5);
+    Array<long int> b(5);
+    for(int i = 0; i < 5; i++) {
         a.Set(i, i + 1);
         b.Set(i, (i + 1) * 2);
     }
@@ -138,22 +157,22 @@ int main() {
 
     cout << "Array b: value with index=1 is " << b.Get(1) << endl;
 
-    Array c = a + b;
+    Array<long int> c = a + b;
     cout << "a + b: ";
     c.printValues();
 
     cout << "b - a: ";
-    Array d = b - a;
+    Array<long int> d = b - a;
     d.printValues();
 
     cout << "copy and push 99: ";
-    Array g(d);
+    Array<long int> g(d);
     g.pushBack(99);
     g.printValues();
 
     cout << endl;
 
-    Array vicious (5);
+    Array<int> vicious (5);
     try {
         for (int i = 0; i < 5; i++) {
             vicious.Set(i, i + 99);
@@ -167,14 +186,14 @@ int main() {
     for (int i = 0; i < 5; i++) {
         vicious.Set(i, i + 50);
     }
-    Array temp(vicious);
+    Array<int> temp(vicious);
 
     cout << "Array a: ";
     vicious.printValues();
     cout << "Array b: ";
     temp.printValues();
 
-    Array sumError = vicious + temp;
+    Array<int> sumError = vicious + temp;
     cout << "Array a + b: ";
     sumError.printValues();
 
