@@ -21,20 +21,20 @@ using namespace std;
  */
 
 
-template <typename T>
+template <typename Type>
 class Array {
 private:
-    T *arr;
-    int sizeOfArray;
+    Type *arr;
+    int sizeOfArray{};
 public:
     Array() {
         sizeOfArray = 0;
-        arr = new T[sizeOfArray];
+        arr = new Type[sizeOfArray];
     }
 
-    Array(int sizeOfArray) {
+    explicit Array(int sizeOfArray) {
         this->sizeOfArray = sizeOfArray;
-        arr = new T[sizeOfArray];
+        arr = new Type[sizeOfArray];
         for (int i = 0; i < this->sizeOfArray; i++) {
             arr[i] = 0;
         }
@@ -42,7 +42,7 @@ public:
 
     Array(const Array &other) {
         sizeOfArray = other.sizeOfArray;
-        arr = new T[sizeOfArray];
+        arr = new Type[sizeOfArray];
 //        for (int i = 0; i < sizeOfArray; i++) {
 //            arr[i] = other.arr[i];  // memcpy
 //        }
@@ -53,11 +53,12 @@ public:
         delete[] arr;
         sizeOfArray = 0;
         arr = nullptr;
+        cout<< this<<'\t';
         cout << "Array with head="<< &arr <<" successfully cleared" << endl;
     }
 
-    Array<T> operator +(const Array &other) {
-        T minSize = min(sizeOfArray, other.sizeOfArray);
+    Array<Type> operator +(const Array &other) {
+        Type minSize = min(sizeOfArray, other.sizeOfArray);
 
         Array sumArray(minSize);
         for(int i = 0; i < minSize; i++){
@@ -66,7 +67,7 @@ public:
         return sumArray;
     }
 
-    Array<T> operator -(const Array &other) {
+    Array<Type> operator -(const Array &other) {
         int minSize = min(sizeOfArray, other.sizeOfArray);
 
         Array sumArray(minSize);
@@ -76,7 +77,7 @@ public:
         return sumArray;
     }
 
-    Array<T> operator =(const Array &other) {
+    Array& operator =(const Array &other) {
         this -> sizeOfArray = other.sizeOfArray;
         for (int i = 0; i < sizeOfArray; i++) {
             this -> arr[i] = other.arr[i];
@@ -84,7 +85,7 @@ public:
         return *this;
     }
 
-    friend ostream& operator<<(ostream &os, const Array<T> &array_) {
+    friend ostream& operator<<(ostream &os, const Array<Type> &array_) {
         for (int i = 0; i < array_.sizeOfArray; i++) {
             os << array_.arr[i] << " ";
         }
@@ -98,19 +99,16 @@ public:
         return false;
     }
 
-    inline static bool isCorrectValue(T value) {
+    inline static bool isCorrectValue(Type value) {
         const type_info& valueType = typeid(value);
-        const type_info& arrType = typeid(T);
+        const type_info& arrType = typeid(Type);
         if (valueType == arrType && (-100 <= value && value <= 100)) {
             return true;
         }
-//        if (-100 <= value && value <= 100) {
-//            return true;
-//        }
         return false;
     }
 
-    void Set(int index, T value) {
+    void Set(int index, Type value) {
         if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be of the same type and between [-100, 100]");
         if (!isCorrectIndex(index)) throw out_of_range("Out of range: Array out of bounds");
 
@@ -130,9 +128,9 @@ public:
         cout << "\n";
     }
 
-    void pushBack(T value) {
+    void pushBack(Type value) {
         if (!isCorrectValue(value)) throw invalid_argument("Invalid argument: Value must be of the same type and between [-100, 100]");
-        T *newArray = new T[sizeOfArray + 1];
+        Type *newArray = new Type[sizeOfArray + 1];
         for (int i = 0; i < sizeOfArray; i++) {
             newArray[i] = arr[i];
         }
@@ -168,6 +166,7 @@ int main() {
     cout << "copy and push 99: ";
     Array<long int> g(d);
     g.pushBack(99);
+    g.pushBack(-70);
     g.printValues();
 
     cout << endl;
